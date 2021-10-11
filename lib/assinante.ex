@@ -10,4 +10,11 @@ defmodule Assinante do
   defp write(lista_assinantes) do
     File.write("assinantes.txt", lista_assinantes)
   end
+
+  defp read() do
+    {:ok, assinantes} = File.read!("assinantes.txt")
+
+    assinantes
+    |> :erlang.binary_to_term()
+  end
 end
