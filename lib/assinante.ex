@@ -2,7 +2,7 @@ defmodule Assinante do
   defstruct nome: nil, numero: nil, cpf: nil
 
   def cadastrar(nome, numero, cpf) do
-    [%__MODULE__{nome: nome, numero: numero, cpf: cpf}]
+    (read() ++ [%__MODULE__{nome: nome, numero: numero, cpf: cpf}])
     |> :erlang.term_to_binary()
     |> write()
   end
@@ -12,7 +12,7 @@ defmodule Assinante do
   end
 
   defp read() do
-    {:ok, assinantes} = File.read!("assinantes.txt")
+    {:ok, assinantes} = File.read("assinantes.txt")
 
     assinantes
     |> :erlang.binary_to_term()
