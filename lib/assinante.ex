@@ -4,7 +4,7 @@ defmodule Assinante do
   @assinantes %{:prepago => "pre.txt", :pospago => "pos.txt"}
 
   def buscar_assinante(numero) do
-    read(:prepago)
+    read(:prepago) ++ read(:pospago)
     |> Enum.find(fn assinante -> assinante.numero == numero end)
   end
 
@@ -15,6 +15,7 @@ defmodule Assinante do
         |> :erlang.term_to_binary()
         |> write(plano)
 
+        {:ok, "Assinante #{nome} Cadastrado com sucesso!"}
       _assinate ->
         {:error, "Assinante com este número já está cadastrado"}
     end
