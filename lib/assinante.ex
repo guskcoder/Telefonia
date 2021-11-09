@@ -3,10 +3,7 @@ defmodule Assinante do
 
   @assinantes %{:prepago => "pre.txt", :pospago => "pos.txt"}
 
-  def buscar_assinante(numero, key \\ :all) do
-    buscar(numero, key)
-  end
-
+  def buscar_assinante(numero, key \\ :all), do: buscar(numero, key)
   defp buscar(numero, :prepago), do: filtro(assinantes_prepago(), numero)
   defp buscar(numero, :pospago), do: filtro(assinantes_pospago(), numero)
   defp buscar(numero, :all), do: filtro(assinantes(), numero)
@@ -36,9 +33,13 @@ defmodule Assinante do
   end
 
   def read(plano) do
-    {:ok, assinantes} = File.read(@assinantes[plano])
+    case File.read(@assinantes[plano]) do
+      {:ok, assinantes} ->
+        assinantes
+        |> :erlang.binary_to_term()
 
-    assinantes
-    |> :erlang.binary_to_term()
+      {:error, :ennoent} ->
+        {:error, "Arquivo Inválido"}
+    end
   end
 end
