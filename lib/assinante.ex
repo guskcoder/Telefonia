@@ -7,23 +7,14 @@ defmodule Assinante do
     buscar(numero, key)
   end
 
-  defp buscar(numero, :prepago) do
-    assinantes_prepago()
-    |> Enum.find(assinantes(), &(&1.numero == numero))
-  end
-
-  defp buscar(numero, :pospago) do
-    assinantes_pospago()
-    |> Enum.find(assinantes(), &(&1.numero == numero))
-  end
-
-  defp buscar(numero, :all) do
-    assinantes()
-    |> Enum.find(assinantes(), &(&1.numero == numero))
-  end
+  defp buscar(numero, :prepago), do: filtro(assinantes_prepago(), numero)
+  defp buscar(numero, :pospago), do: filtro(assinantes_pospago(), numero)
+  defp buscar(numero, :all), do: filtro(assinantes(), numero)
+  defp filtro(lista, numero), do: Enum.find(lista, &(&1.numero == numero))
 
   def assinantes_prepago(), do: read(:prepago)
   def assinantes_pospago(), do: read(:pospago)
+
   def assinantes(), do: read(:prepago) ++ read(:pospago)
 
   def cadastrar(nome, numero, cpf, plano \\ :prepago) do
